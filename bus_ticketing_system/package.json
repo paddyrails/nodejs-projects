@@ -1,0 +1,24 @@
+{
+  "name": "bus_ticketing_system",
+  "version": "1.0.0",
+  "description": "System which generates tickets for bus routes everyday and lets users book them.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "*",
+    "body-parser": "*",
+    "morgan": "*",
+    "ejs": "*",
+    "mongoose": "*",
+    "node-schedule":"*",
+    "underscore":"*",
+    "basic-auth-connect":"*",
+    "bcrypt-nodejs":"*",
+    "passport":"*",
+    "passport-local":"*",
+    "express-session": "*",
+    "connect-flash": "*",
+    "nodemailer":"v0.7.1"
+  },
+  "author": "Paddy Pillai",
+  "license": "ISC"
+}

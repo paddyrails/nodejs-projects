@@ -1,0 +1,74 @@
+<script src="/jQuery/jquery-1.12.4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/reserve.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"></link>
+<header>
+  <% include ../partials/header %>
+</header>
+<table cellspacing=0 cellpadding=0 border="1" width="800px" align="center">
+  <% busroutes.forEach(function(busroute){ %>
+    <tr>
+        <td width="30%" style="padding:20">
+            <div><b>Route:</b> <%=busroute.name%></div>
+            <div><b>From:</b> <%=busroute.from%>, <b>To:</b> <%=busroute.to%></div>
+            <div><b>Days:</b>
+              <span class="days">
+                <span><%=busroute.days%></span>
+                <input class="edit" data-id="<%=busroute.id%>" style="display:none" value="<%=busroute.days%>"/>
+              </span>
+            </div>
+            <div align="right">
+              <a href="/busroutes/delete/<%=busroute.id%>" title="Delete this route">Delete</a>
+            </div>
+        </td>
+        <td width="30%" style="vertical-align: bottom; padding:20">
+            <div>
+              <% busroute.trips.forEach(function(trip){ %>
+                <span STYLE="background-color: #ffffcc"><%=trip.time%>, <%=trip.bus_type%></span>
+                <a href="/busroutes/<%=busroute.id%>/<%=trip.id%>" title="Delete trip">
+                  <img src="/images/cross-128.png" height="12px" width="12px"></img>
+                </a>&nbsp;&nbsp;
+                <% }) %>
+            </div>
+              <div align="right">
+                <form method="post" action="/busroutes/<%=busroute.id%>">
+                  <input type="text" name="time" placeholder="Time" style="width: 60px;"></input>
+                  <select name="bus_type" style="width: 60px;">
+                    <option value="Volvo">Volvo</option>
+                      <option value="MiniBus">MiniBus</option>
+                  </select>
+                  <button type="submit">Add trip</button>
+                </form>
+              </div>
+        </td>
+    </tr>
+  <% }); %>
+  <tr>
+    <td></td>
+    <td align="right" style="padding:20"><a href="/newbusroute.html">Add new bus route!</a></td>
+  </tr>
+</table>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+  $('.days').on('dblclick', function(event){
+    var self = $(this),
+        input = self.find('input'),
+        span = self.find('span');
+    span.hide();
+    input.show();
+  });
+  $('.edit').on('blur', function(event){
+    var self = $(this),
+        span = self.siblings('span'),
+        request = $.ajax({
+          type:"PUT",
+          data:{days:self.val()},
+          url:'/busroutes/' + self.attr('data-id')
+        });
+    request.done(function(){
+      self.hide();
+      span.text(self.val()).show();
+    });
+  });
+</script>

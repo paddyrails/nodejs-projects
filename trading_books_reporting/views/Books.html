@@ -1,0 +1,53 @@
+
+
+	<!-- Initialize a new AngularJS app and associate it with a module named "instantSearch"-->
+
+  <link rel="stylesheet" href="/static/css/search.css">
+	<body ng-app="instantSearch" ng-controller="InstantSearchController">
+    <table width="100%" margin="0px">
+      <tr>
+        <td width="20%">
+          <div class="bar">
+      			<!-- Create a binding between the searchString model and the text field -->
+      			<input type="text" ng-model="searchString" placeholder="Enter your search terms" />
+      		</div>
+
+      		<ul>
+      			<!-- Render a li element for every entry in the items array. Notice
+      				 the custom search filter "searchFor". It takes the value of the
+      				 searchString model as an argument.
+      			 -->
+      			<li ng-repeat="book in books | searchFor:searchString" ng-click="changeBook()">
+      				<a href="#">{{book.name}}</a>
+      				<p>{{book.description}}</p>
+              <p>{{book.user}}</p>
+      			</li>
+      		</ul>
+        </td>
+        <td width="80%" valign="top">
+          <div class="details">
+            <div>Book Selected: {{currentBook.name}}</div>
+            <div ng-controller="PortfolioController">
+                <table>
+                    <th>Portfolio Name</th>
+                    <th>Description</th>
+                    <th>Managed By</th>
+                    <tr ng-repeat="portfolio in portfolios">
+                        <td>{{ portfolio.name }}</td>
+                        <td>{{ portfolio.description }}</td>
+                        <td>{{ portfolio.managedbyuser }}</td>
+                    </tr>
+                </table>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+
+
+		<!-- Include AngularJS from Google's CDN -->
+		<!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>-->
+    <script src="http://code.angularjs.org/1.2.9/angular.min.js"></script>
+		<script src="/static/js/search_app.js"></script>
+	</body>

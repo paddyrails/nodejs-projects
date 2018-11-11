@@ -1,0 +1,23 @@
+<div class="container" style="background-color: #5bc0de">
+  <h1>Popsy Travels</h1>
+  <div style="float:left; width:600px; vertical-align:bottom"><br/>
+    <a href="/journeys" style="font-color:black">Book Tickets!</a>&nbsp;&nbsp;&nbsp;
+    <% if(user) { %>
+          <a href="/journeys" style="font-color:black">My Tickets!</a>&nbsp;&nbsp;&nbsp;
+    <% } %>
+    <% if(user) { %>
+      <% if(user.local.isAdmin) { %>
+        <a href="/busroutes">Bus Routes</a>&nbsp;&nbsp;&nbsp;
+        <a href="/users">Users</a>
+      <% } %>
+    <% } %>
+  </div>
+  <div style="float:right;"  align="right">
+    <% if(user) { %>
+      Welcome <%=user.local.email%>!<br/>
+      <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+    <% } else { %>
+        <a href="/login" class="btn btn-default btn-sm">Login</a>
+    <% } %>
+  </div>
+</div>

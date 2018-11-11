@@ -1,0 +1,30 @@
+<script src="/jQuery/jquery-1.12.4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/reserve.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"></link>
+
+<div class="container">
+<header>
+  <% include ../partials/header %>
+</header>
+<div align=center><h2> Registered Users! </h2></div>
+  <table cellspacing=0 cellpadding=0 border="1" width="300px" align=center>
+    <% users.forEach(function(user1){ %>
+      <tr>
+          <td width="33%" style="padding:20">
+              <div><%=user1.local.email%></div>
+          </td>
+          <td width="34%" style="vertical-align: bottom; padding:20">
+              <div>
+                <% if(user1.local.isAdmin){ %>
+                <span>Admin</span>
+                  <% }; %>
+              </div>
+          </td>
+          <td width="33%" style="padding:20">
+            <a href="/users/delete/<%=user1.id%>" title="Delete this user">Delete</a>
+          </td>
+      </tr>
+    <% }); %>
+  </table>
+</div>

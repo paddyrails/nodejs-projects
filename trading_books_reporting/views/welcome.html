@@ -1,0 +1,87 @@
+<!doctype html>
+<html ng-app="bankingApp">
+<head>
+    <title>Books Performance Dashboard</title>
+    <style>
+      div{padding: 5px; font:18px bold;}
+      span{padding: 3px; margin:12px; border: 5px ridge; cursor: pointer;}
+      label{padding: 2px; margin: 5px; font: 15px bold;}
+      p{padding-left: 22px; margin: 5px;}
+
+    </style>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet">
+</head>
+<body>
+
+<div ng-controller="Books">
+    <span ng-repeat="book in books" ng-click="changeBook()">{{book.Name}}</span>
+    <table>
+        <tr>
+            <td width="50%">
+                <div ng-controller="Customers">
+                    <table>
+                        <tr ng-repeat="x in customers">
+                            <td>{{ x.Name }}</td>
+                            <td>{{ x.Location }}</td>
+                            <td>{{ x.Opportunity }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+            <td width="50%">
+                <script type="text/javascript">
+                        var sortingOrder = 'name';
+                    </script>
+                <div ng-controller="ctrlRead">
+                    <div class="input-append">
+                        <input type="text" ng-model="query" ng-change="search()" class="input-large search-query" placeholder="Search">
+                        <span class="add-on"><i class="icon-search"></i></span>
+                    </div>
+                    <table class="table table-striped table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th class="book">book&nbsp;<a ng-click="sort_by('book')"><i class="icon-sort"></i></a></th>
+                            <th class="date">date&nbsp;<a ng-click="sort_by('date')"><i class="icon-sort"></i></a></th>
+                            <th class="value">value&nbsp;<a ng-click="sort_by('value')"><i class="icon-sort"></i></a></th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <td colspan="6">
+                            <div class="pagination pull-right">
+                                <ul>
+                                    <li ng-class="{disabled: currentPage == 0}">
+                                        <a href ng-click="prevPage()">« Prev</a>
+                                    </li>
+                                    <li ng-repeat="n in range(pagedItems.length)"
+                                        ng-class="{active: n == currentPage}"
+                                        ng-click="setPage()">
+                                        <a href ng-bind="n + 1">1</a>
+                                    </li>
+                                    <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                                        <a href ng-click="nextPage()">Next »</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                        </tfoot>
+                        <tbody>
+                        <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder:reverse">
+                            <td>{{item.book}}</td>
+                            <td>{{item.date}}</td>
+                            <td>{{item.value}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </td>
+        </tr>
+
+    </table>
+</div>
+
+<script src="http://code.angularjs.org/1.2.9/angular.min.js"></script>
+<script src="/static/js/banking_app.js"></script>
+</body>
+</html>

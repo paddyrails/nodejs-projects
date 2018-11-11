@@ -1,0 +1,162 @@
+<script src="/jQuery/jquery-1.12.4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/reserve.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"></link>
+
+<header>
+  <% include ../partials/header %>
+</header>
+<div  class="container">
+  <h2><%=journey.name%> <%=journey.newdate%></h2>
+  <table cellspacing=0 cellpadding=0 border="1" width="100%" >
+    <tr>
+      <td width="40%" align="center" valign="top">
+        <h3> <%=journey.bus_type%></h3>
+        <div id="holder">
+            <ul  id="place">
+            </ul>
+        </div>
+        <div>
+        <ul id="seatDescription">
+            <li style="background:url('/images/available_seat_img.gif') no-repeat scroll 0 0 transparent;">Available Seat</li>
+            <li style="background:url('/images/booked_seat_img.gif') no-repeat scroll 0 0 transparent;">Booked Seat</li>
+            <li style="background:url('/images/selected_seat_img.gif') no-repeat scroll 0 0 transparent;">Selected Seat</li>
+        </ul>
+        </div>
+        <div style="clear:both;width:100%">
+            <!--<input type="button" id="btnShowNew" value="Show Selected Seats" />
+            <input type="button" id="btnShow" value="Show All" />-->
+            <!--<a href="/journeys/delete/<%=journey.id%>" title="Delete this Journey">Delete</a>-->
+        </div>
+      </td>
+
+      <td width="500px" align="center">
+        <div id="formHolder">
+
+        </div>
+        <div id="displayHolder">
+
+        </div>
+        <div id="selectedSeatsHolder">
+
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+		<script>
+var settings = {
+               rows: 4,
+               cols: 10,
+               rowCssPrefix: 'row-',
+               colCssPrefix: 'col-',
+               seatWidth: 35,
+               seatHeight: 35,
+               seatCss: 'seat',
+               selectedSeatCss: 'selectedSeat',
+               selectingSeatCss: 'selectingSeat'
+           };
+
+if(<%-JSON.stringify(journey.bus_type)%> == "MiniBus"){
+  settings = {
+                 rows: 4,
+                 cols: 5,
+                 rowCssPrefix: 'row-',
+                 colCssPrefix: 'col-',
+                 seatWidth: 35,
+                 seatHeight: 35,
+                 seatCss: 'seat',
+                 selectedSeatCss: 'selectedSeat',
+                 selectingSeatCss: 'selectingSeat'
+             };
+}
+var selectedSeats = [];
+var init = function (reservedSeat) {
+                var str = [], seatNo, className;
+                for (i = 0; i < settings.rows; i++) {
+                    for (j = 0; j < settings.cols; j++) {
+                        seatNo = (i + j * settings.rows + 1);
+                        className = settings.seatCss + ' ' + settings.rowCssPrefix + i.toString() + ' ' + settings.colCssPrefix + j.toString();
+                        if ($.isArray(reservedSeat) && $.inArray(seatNo, reservedSeat) != -1) {
+                            className += ' ' + settings.selectedSeatCss;
+                        }
+                        str.push('<li class="' + className + '"' +
+                                  'style="top:' + (i * settings.seatHeight).toString() + 'px;left:' + (j * settings.seatWidth).toString() + 'px">' +
+                                  '<a title="' + seatNo + '">' + seatNo + '</a>' +
+                                  '</li>');
+                    }
+                }
+				$('#place').html(str);
+
+            };
+            var bookedSeats = <%-JSON.stringify(reserverdTickets)%>;
+            init(bookedSeats);
+
+
+$('.' + settings.seatCss).click(function () {
+if ($(this).hasClass(settings.selectedSeatCss)){
+    var seatno = ($(this).find('a').html());
+    request = $.ajax({
+          type:"GET",
+          dataType: "json",
+          url:'/journeys/<%=journey.id%>/' + seatno,
+          success: function(data) {
+            var str = "<div>Ticket No. : " + data["seatno"] + "<br/>" +
+                      "Passenger Name : " + data["passengername"] + "<br/>" +
+                      "Passenger Age : " + data["age"] + "<br/>" +
+                      "From : " + data["journey"]["from"] + "<br/>" +
+                      "To : " + data["journey"]["to"] + "<br/>" +
+                      "Date : " + data["journey"]["date"] + "<br/>" +
+                      "Time : " + data["journey"]["time"];
+            $('#displayHolder').html(str) ;
+            $('#displayHolder').show();
+            $('#formHolder').hide();
+           }
+        });
+
+      //alert('This seat is already reserved' + seatno);
+}
+else{
+    $(this).toggleClass(settings.selectingSeatCss);
+
+    var seatno = ($(this).find('a').html());
+    if($.inArray(seatno, selectedSeats) == -1){
+      selectedSeats.push(seatno)
+    }else{
+      selectedSeats = $.grep(selectedSeats, function(value) {
+        return value != seatno;
+      });
+    }
+
+    var str = '<form method="post" action="/journeys/<%=journey.id%>/' + seatno + '">'; ;
+    for(i=0; i < selectedSeats.length; i++){
+      str = str +'<br/><input name="seatno" value='+ selectedSeats[i].toString() +'></input><br/>\
+                    <input name="passengername" placeholder="Passenger Name"></input><br/>\
+                    <input name="age" placeholder="Passenger Age"></input><br/>\
+                    <input name="reserved" value="true"></input><br/>';
+    }
+
+    str = str +'<button type="submit">Book Ticket!</button></form>';
+    	$('#formHolder').html(str) ;
+      $('#formHolder').show();
+      $('#displayHolder').hide();
+    }
+});
+
+$('#btnShow').click(function () {
+    var str = [];
+    $.each($('#place li.' + settings.selectedSeatCss + ' a, #place li.'+ settings.selectingSeatCss + ' a'), function (index, value) {
+        str.push($(this).attr('title'));
+    });
+    alert(str.join(','));
+})
+
+$('#btnShowNew').click(function () {
+    var str = [], item;
+    $.each($('#place li.' + settings.selectingSeatCss + ' a'), function (index, value) {
+        item = $(this).attr('title');
+        str.push(item);
+    });
+    alert(str.join(','));
+})
+</script>

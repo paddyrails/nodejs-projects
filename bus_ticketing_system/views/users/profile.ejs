@@ -1,0 +1,23 @@
+<script src="/jQuery/jquery-1.12.4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/reserve.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"></link>
+<div class="container">
+<header>
+  <% include ../partials/header %>
+</header>
+<div align=center><h2> My Tickets! </h2></div>
+  <table cellspacing=0 cellpadding=0 border="1" width="800px" align=center>
+    <% tickets.forEach(function(ticket){ %>
+      <tr>
+          <td width="30%" style="padding:20">
+              <div><b>Ticket Details:</b><br/>
+            <b>Seat no.: </b> <%=ticket.seatno%> &nbsp;&nbsp;<b>Passenger Name: </b> <%=ticket.passengername%> </div>
+          </td>
+          <td width="30%" style="vertical-align: bottom; padding:20">
+              <div><b>Journey date:</b> <%=ticket.journey.date%></div>
+          </td>
+      </tr>
+    <% }); %>
+  </table>
+</div>

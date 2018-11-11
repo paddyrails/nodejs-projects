@@ -1,0 +1,29 @@
+<script src="/jQuery/jquery-1.12.4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/reserve.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"></link>
+
+<div class="container">
+<header>
+  <% include ../partials/header %>
+</header>
+<div align=center><h2> Trips for Today! </h2></div>
+  <table cellspacing=0 cellpadding=0 border="1" width="800px" align=center>
+    <% journeys.forEach(function(journey){ %>
+      <tr>
+          <td width="30%" style="padding:20">
+              <div><b>Route:</b> <%=journey.name%></div>
+              <div><b>From:</b> <%=journey.from[0]%>, <b>To:</b> <%=journey.to[0]%></div>
+              <div><b>Date:</b> <%=journey.newdate%></div>
+          </td>
+          <td width="30%" style="vertical-align: bottom; padding:20">
+              <div>
+                <% for(i=0;i<journey.time.length;i++){ %>
+                <span><a href="/journeys/<%=journey.journeyId[i]%>"><%=journey.time[i]%></a></span>
+                  <% }; %>
+              </div>
+          </td>
+      </tr>
+    <% }); %>
+  </table>
+</div>
