@@ -1,0 +1,11 @@
+
+<div>
+  <div>
+    <input [(ngModel)]="searchText" placeholder="search text goes here">
+    <app-tradingbook-item
+      *ngFor="let tradingbook of tradingbooks | filter : searchText | slice:0:15; let i = index"
+      [tradingbook]="tradingbook"
+      [index]="i"
+    ></app-tradingbook-item>
+  </div>
+</div>

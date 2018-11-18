@@ -1,0 +1,12 @@
+<a style="cursor:pointer"
+  [routerLink]="[index]"
+  routerLinkActive="active"
+   class="list-group-item clearfix">
+  <div class="pull-left">
+      <h5 class="list-group-item-heading">{{tradingbook.name}}</h5>
+      <p class="list-group-item-text">{{tradingbook.description}}</p>
+  </div>
+  <span class="pull-right">
+    {{tradingbook.user}}
+  </span>
+</a>
